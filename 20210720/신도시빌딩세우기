@@ -1,0 +1,73 @@
+
+
+Scanner sc = new Scanner(System.in);
+		int T;
+		T = sc.nextInt();
+		int[] N= new int[T];
+		int maxfloor=2;
+		boolean isGreen = false;
+		
+		int[] dx = {1,-1,0,0,1,1,-1,-1};
+		int[] dy = {0,0,1,-1,1,-1,1,-1};
+		
+		for(int i=0;i<T;i++)
+		{
+			N[i] = sc.nextInt();
+			char [][] map = new char [N[i]][N[i]];
+			
+			for(int j=0;j<N[i];j++)
+			{
+				for(int k=0;k<N[i];k++)
+				{
+					map[j][k] = sc.next().charAt(0);
+				}
+			}
+			
+			for(int j=0;j<N[i];j++)
+			{
+				for(int k=0;k<N[i];k++)
+				{
+					outer : if(map[j][k]=='B')
+					{
+						
+						for(int d=0;d<8;d++)
+						{
+							int nx = k + dx[d];
+							int ny = j + dy[d];
+							if(nx<0||nx>=N[i]||ny<0||ny>=N[i])
+							{continue;}
+							
+							if(map[ny][nx]=='G')
+										break outer;							
+							
+						}
+						
+						int tempmax=0;
+						for(int p=0;p<N[i];p++)
+						{
+							if(map[p][k]=='B')
+								tempmax++;
+							if(map[j][p]=='B')
+								tempmax++;							
+						}			
+						
+						tempmax--;
+						
+						if(maxfloor<tempmax)
+						{
+							maxfloor=tempmax;								
+						}
+							
+						
+						
+						
+					}
+				}
+			}
+			
+			
+			
+			System.out.println("#"+(i+1)+" " +maxfloor);
+			maxfloor=2;
+		}
+		
