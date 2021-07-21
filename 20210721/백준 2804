@@ -1,0 +1,68 @@
+
+https://www.acmicpc.net/problem/2804
+
+중간에겹치는거검샇할때
+앞에글자가만히잇고 뒤에글자 좌라락해야되는데
+순서가바뀌엇다다예님의도움으로 회생
+---------------------
+
+
+package com.ssafy.algo;
+
+import java.util.Scanner;
+
+public class Study0721_3 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Scanner sc= new Scanner(System.in);
+		String N;
+		String M;	
+		
+		N= sc.next();
+		M= sc.next();
+		char [][] array= new char[M.length()][N.length()];
+		
+		for(int i=0;i<M.length();i++)
+		{
+			for(int j=0;j<N.length();j++)
+			{
+				array[i][j]='.';						
+			}
+		}
+		
+		
+		outer: for(int i=0;i<N.length();i++)
+		{
+			for(int j=0;j<M.length();j++)
+			{
+				if(N.charAt(i)==M.charAt(j))
+				{
+					for(int dm=0;dm<M.length();dm++)
+					{
+						array[dm][i]=M.charAt(dm) ;
+					}
+					for(int dn=0;dn<N.length();dn++)
+					{
+						array[j][dn]=N.charAt(dn) ;
+					}
+					
+					break outer;					
+				}
+			}		
+			
+		}
+		
+		for(int i=0;i<M.length();i++)
+		{
+			for(int j=0;j<N.length();j++)
+			{
+				System.out.print(array[i][j]);						
+			}		
+			System.out.println("");
+		}	
+		
+	}
+
+}
