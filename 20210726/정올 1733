@@ -1,0 +1,177 @@
+
+
+오목 구현
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Test5 {
+
+	static int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+	static int[] dy = { -1, 0, 1, 1, -1, 1, -1, 0 };
+	static int[][] pan = new int[19][19];
+	static int[][] sixpan = new int[19][19];
+	static int successWin = 0, minx = 20, miny = 20, sixstack = 0;
+
+	static int winSearch(int s) {
+		for (int i = 0; i < 19; i++) {
+			for (int j = 0; j < 19; j++) {
+				if (pan[i][j] == s) {
+					
+					for (int k = 0; k < 8; k++) {
+						successWin = 0;
+						minx = 20;
+						miny = 20;
+						sixstack = 0;
+						
+						if (sixpan[i][j] == s) {
+							sixstack++;
+						}
+						
+						if (j < minx) {
+							minx = j;
+							miny = i;
+						} else if (j == minx) {
+							if (i < miny) {
+								minx = j;
+								miny = i;
+							}
+						}
+						
+						int nx = j + dx[k];
+						int ny = i + dy[k];
+						if (nx < minx) {
+							minx = nx;
+							miny = ny;
+						} else if (nx == minx) {
+							if (ny < miny) {
+								minx = nx;
+								miny = ny;
+							}
+
+						}
+						
+						
+						
+						if (nx < 0 || nx >= 19 || ny < 0 || ny >= 19) {
+							continue;
+						}
+						
+						if (sixpan[ny][nx] == s) {
+							sixstack++;
+						}
+
+						outer: if (pan[ny][nx] == s) {
+							for (int p = 2; p < 5; p++) {
+								nx = j + p * dx[k];
+								ny = i + p * dy[k];
+								
+								if (nx < 0 || nx >= 19 || ny < 0 || ny >= 19 || sixstack >= 2) {
+									break outer;
+								}
+								
+								if (sixpan[ny][nx] == s) {
+									sixstack++;
+								}
+
+								if (pan[ny][nx] == s)
+									successWin++;
+								else
+									break outer;
+
+								if (nx < minx) {
+									minx = nx;
+									miny = ny;
+								} else if (nx == minx) {
+									if (ny < miny) {
+										minx = nx;
+										miny = ny;
+									}
+
+								}
+
+							}
+
+							nx = j + 5 * dx[k];
+							ny = i + 5 * dy[k];
+							if (nx < 0 || nx >= 19 || ny < 0 || ny >= 19) {
+								System.out.println(s);
+								System.out.println((miny + 1) + " " + (minx + 1));
+								return s;
+
+							}
+
+							if (pan[ny][nx] == s) {
+								int sixindex = 0;
+								while (true) {
+									nx = j + sixindex * dx[k];
+									ny = i + sixindex * dy[k];
+									if (nx < 0 || nx >= 19 || ny < 0 || ny >= 19) {
+										break outer;
+									}
+									sixindex++;
+									if (pan[ny][nx] == s)
+										sixpan[ny][nx] = s;
+									else
+										break;
+								}
+
+								break outer;
+
+							} else {
+
+								System.out.println(s);
+								System.out.println((miny + 1) + " " + (minx + 1));
+								return s;
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return 0;
+
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
+	
+		Scanner sc = new Scanner(System.in);
+
+		for (int i = 0; i < 19; i++) {
+
+			for (int j = 0; j < 19; j++) {
+				pan[i][j] = sc.nextInt();
+
+			}
+
+		}
+		/*
+		 * for(int i=0;i<19;i++) {
+		 * 
+		 * for(int j=0;j<19;j++) { System.out.print(pan[i][j]+" ");
+		 * 
+		 * 
+		 * } System.out.println("");
+		 * 
+		 * }
+		 */
+
+		int b, c = 0;
+		b = winSearch(1);
+		if(b==0) 
+			c = winSearch(2);
+
+		if (b == 0 && c == 0)
+			System.out.println(0);
+
+	}
+
+}
