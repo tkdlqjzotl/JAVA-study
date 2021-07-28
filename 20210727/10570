@@ -1,0 +1,51 @@
+package algorithmStudy;
+
+import java.io.Console;
+import java.util.Scanner;
+
+public class N10570 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int N=0,max=0,maxCount=0;
+		//총 테케횟수, 많이나온숫자, 숫자가 최고로많이나온횟수
+		
+		Scanner sc= new Scanner(System.in);
+		N= sc.nextInt();
+		
+		int v=0;
+		int []S= new int[1001];
+		//범위가 1<= <=1000가지이므로 여유로우니 처읓ㅁ부터 1000이라 선언
+		
+		for(int i=0;i<N;i++)
+		{
+			max=0;maxCount=0;
+			S= new int[1001];
+			v=sc.nextInt(); //횟수입력받기
+			
+			for(int j=0;j<v;j++)
+			{
+				int k = sc.nextInt();
+				S[k]++;				//불린숫자 횟수추가
+			}
+			
+			for(int j=1;j<1001;j++)
+			{
+				if(maxCount<S[j]) 
+				//대부분0으로초기화되잇으니 maxcount 0으로지정 그것보다크면 
+					//많이나온숫자바꾸고 숫자횟수에 현재숫자넣기. 그리고 작은숫자가먼저나오게 작은것부터 반복문
+					{
+						//System.out.println(S[j]+" "+ j);
+						maxCount=S[j];
+						max=j;		
+					}		
+			}
+			
+			System.out.println(max);
+			
+		}
+		
+		
+	}
+
+}
