@@ -1,0 +1,82 @@
+package algorithmStudy;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class N10892 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int N = 0;
+
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		int[][] mapPos = new int[3 * N][2]; // 3* N 의 x y 좌표를 받기위한 2차원배열
+	//	int[] outSoonsu = new int[3 * N]; // 출력 순서를 담기위한 배열 
+		int [][]realOut2 = new int[N][3]; // 출력 순서를 담기위한 배열 
+
+		for (int i = 0; i < 3 * N; i++) {
+			for (int j = 0; j < 2; j++) {
+				mapPos[i][j] = sc.nextInt();
+			}
+			//outSoonsu[i] = i + 1;
+			realOut2[i/3][i%3] = i + 1;
+			//1 2 3
+			//4 5 6
+		
+		}
+
+		for (int j = 0; j < 3 * N; j++) {
+			for (int i = j + 1; i < 3 * N; i++) {
+				int temp = 0;
+				if (mapPos[j][1] > mapPos[i][1]) 
+					//y값비교 
+				{
+					temp = mapPos[j][1];
+					mapPos[j][1] = mapPos[i][1];
+					mapPos[i][1] = temp;
+					
+				/*	temp = outSoonsu[j];
+					outSoonsu[j] = outSoonsu[i];
+					outSoonsu[i] = temp;*/
+					
+					temp = realOut2[j/3][j%3];
+					realOut2[j/3][j%3]= realOut2[i/3][i%3];
+					realOut2[i/3][i%3] = temp;	
+					//123
+					//654
+				}
+
+
+			}
+		}
+		
+		
+	//	int [][]realOut = new int[N][3];
+		// 출력이 작은 숫자가 먼저나오게 해야하므로 사람 한 명마다 몇번 몇번 말뚝이 필요한지 할당
+		
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < 3; j++) {
+			//	realOut[i][j]= outSoonsu[i * 3 + j];
+				//사람에 맞게 분배
+			}
+			//Arrays.sort(realOut[i]);
+			// 말뚝 번호 정렬
+			Arrays.sort(realOut2[i]);
+		}
+		
+		
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < 3; j++) {
+				//System.out.print(realOut[i][j] + " ");
+				System.out.print(realOut2[i][j] + " ");
+			}
+
+			System.out.println("");
+		}
+
+	}
+
+}
