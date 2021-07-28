@@ -1,0 +1,72 @@
+package algorithmStudy;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class N4084 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		// List <Integer> arr = new ArrayList<>();
+		// List <Integer> nextarr = new ArrayList<>();
+		int[] arr = new int[4];
+		int[] nextarr = new int[4];
+		while (true) {
+			for (int i = 0; i < 4; i++) {
+				arr[i] = sc.nextInt();
+			}
+			if(arr[0]==0&&arr[1]==0&&arr[2]==0&&arr[3]==0)
+				break;
+			//0이나오는순간종료
+			boolean isDifferent = true;
+			//다똑같은수나올떄검증위한 
+			
+			int howFast = 0;
+			//얼마나 빠르게수렴햇느냐를 세는 숫자변수
+
+			while (isDifferent) 
+			//네숫자가 똑같을때까지반복
+			{
+				
+				//네개숫자가다같은경우 검증
+				if(arr[0]==arr[1]&&arr[2]==arr[1]&&arr[3]==arr[2])
+					isDifferent = false;
+				else
+					isDifferent = true;	
+				
+				/*for (int i = 0; i < 4; i++) {
+					if (arr[i % 4] != arr[(i+1) % 4])
+						{
+							isDifferent = true;							
+						}
+					else 
+							isDifferent = false;
+				}*/
+				
+				//다른경우에 횟수추가
+				if(isDifferent) 
+					{
+						howFast++;
+						for (int i = 0; i < 4; i++) {
+							nextarr[i] = Math.abs(arr[i%4] - arr[(i+1)%4]);
+							//다음 배열에 미리 절댓값차이들을 넣어둔다							
+							//System.out.print(" "+nextarr[i]);
+						}
+					}
+				
+				//배열초기화
+				arr= nextarr;
+				nextarr = new int[4];
+				/*for (int i = 0; i < 4; i++) {
+					System.out.println(arr[i] +" "+nextarr[i]);
+				}*/				
+				
+			}
+			System.out.println(howFast);
+		}
+	}
+
+}
