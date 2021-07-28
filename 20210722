@@ -1,0 +1,72 @@
+package com.ssafy.algo;
+
+import java.util.Scanner;
+
+public class N9414 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int T = 0, tempL = 0; //테스트케이스와 Li 땅값을 받을때 L배열을돌기위한인덱스
+
+		double haveMoney = 5 * Math.pow(10, 6);
+		//가지고잇는돈 5* 10^6 억. 처음엔 억까지 14승을하려햇는데 굳이 필요없어서 6승만 함
+
+		Scanner sc = new Scanner(System.in);
+		double L = 0;
+		//입력받을 Li 초기화
+		T = sc.nextInt();
+		double[] result = new double[T];
+		
+		for (int i = 0; i < T; i++) {
+			double[] arrayL = new double[41];	
+			//테스트케이스마다 40개가 최대니 최대한 배열 설정
+			tempL = 0; //L 배열을돌기위한 인덱스초기화. 테스트케이스마다 다르니 초기화
+			
+			while ((L = sc.nextInt()) != 0) //입력받는데 0이면 바로탈출
+			{
+				arrayL[tempL] = L; // 입력받은값을 일단 배열에넣는다
+				if (tempL > 0) { //배열이 한개이상들어오면 정렬을시작한다
+					// 0 1 2 ~     {10 7 2} 이순으로 큰숫자가 제일 작은인덱스에오게설정
+					//결과값은 큰수에 작은 승을제곱해야하고 작은수에 제곱을많이해야하니 정렬을 저렇게한거잉
+					outer: for (int j = 0; j < tempL; j++) {
+						//배열 작은인덱스부터 탐색
+						if (arrayL[j] < L) 
+						//들어온숫자가 큰순간 바로 거기에넣고 한칸씩뒤로민다
+						{
+							for (int k = tempL - 1; k >= j; k--) {
+								arrayL[k + 1] = arrayL[k];
+								//한칸씩뒤로이동
+							}
+							arrayL[j] = L;
+							//L이커지는순간에 넣기
+							break outer;
+							//뒤에까지진행하면 계속 반복문이 도니까 밖에 outer반복문탈출 정렬완료 다음숫자입력받기
+						}
+
+					}
+
+				}
+
+				tempL++;
+				//다음숫자입력받기위한 인덱스 추가
+			}
+
+			for (int j = 0; arrayL[j] != 0; j++) {
+				// System.out.println(arrayL[j]);
+				result[i] += 2 * Math.pow(arrayL[j], (j + 1));
+				//결과값은 큰수에 작은 승을제곱해야하고 작은수에 제곱을많이해야하니 정렬을 저렇게한거잉
+				//
+			}
+		}
+
+		for (int i = 0; i < T; i++) {
+			if (result[i] > haveMoney) //가진돈보다많으면  넘비싸!
+				System.out.println("Too expensive");
+			else //결과값출력! double형이 아닌 int형으로바꾸기위해 int 
+				System.out.println((int) (result[i]));
+
+		}
+
+	}
+
+}
