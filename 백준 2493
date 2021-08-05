@@ -1,0 +1,56 @@
+package lecture0805;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class B2493 {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		long N = Integer.parseInt(br.readLine());
+
+		long[] tower = new long[(int) N];
+		long[] target = new long[(int) N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		long max = 0;
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		outer: for (int i = 0; i < tower.length; i++) {
+			tower[i] = Long.parseLong(st.nextToken());
+			if (tower[i] > max) {
+				max = tower[i];
+				bw.write(target[i] + " ");
+				continue outer;
+			}
+
+			if (tower[i] > tower[i - 1]) {
+				for (int j = (int) target[i - 1]; j >= 0; j--) {
+					if (tower[j] > tower[i]) {
+						target[i] = j + 1;
+						bw.write(target[i] + " ");
+						continue outer;
+					}
+				}
+
+			}
+
+			for (int j = i - 1; j >= 0; j--) {
+				if (tower[j] > tower[i]) {
+					target[i] = j + 1;
+					bw.write(target[i] + " ");
+					continue outer;
+				}
+			}
+			bw.write(target[i] + " ");
+		}
+		bw.flush();
+		bw.close();
+
+	}
+
+}
