@@ -1,0 +1,52 @@
+package lecture0806;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class PerfectShuffle {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//입력
+		int T = Integer.parseInt(br.readLine());
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));//출력
+		for (int t = 0; t < T; t++) {
+			int N = Integer.parseInt(br.readLine());
+			String cardArr[] = new String[N];//입력받는카드들 내용
+			String res[] = new String[N];//섞고난후의 결과 카드 배열
+
+			String str = br.readLine();
+			StringTokenizer st = new StringTokenizer(str);
+			for (int i = 0; i < N; i++) {
+				cardArr[i] = st.nextToken();
+				//홀수장이랑 짝수장이랑 식이달라져서 나눠서구했다
+				if (N % 2 == 0) {//짝수일경우   ex 6   012 345 각각다르게 섞여짐 0~n/2-1 과 n/2~n-1
+					if (i < N / 2)//왼쪽카드이니 결과배열엔 짝수배의 인덱스인곳에 저장
+						res[2 * i] = cardArr[i];
+					else//오른쪽카드이니 결과배열엔 짝수배가아닌곳의 인덱스인곳에 저장
+						res[2 * i - (N - 1)] = cardArr[i];
+				} else { //홀수일경우 ex5 012 34 다르게 섞여짐   0~n/2  과 n/2+1 ~ n-1
+					if (i <= N / 2) //왼쪽카드이니 결과배열엔 짝수배의 인덱스인곳에 저장
+						res[2 * i] = cardArr[i];
+					else//오른쪽카드이니 결과배열엔 짝수배가아닌곳의 인덱스인곳에 저장
+						res[2 * i - (N)] = cardArr[i];
+				}
+			}
+			//출력할 버퍼트라이터에 결과문자열을쌓아간다
+			bw.write("#" + (t + 1) + " ");
+			for (int i = 0; i < N; i++) {
+				bw.write(res[i] + " ");
+			}
+			bw.write("\n");
+
+		}
+		//테케다끝나고 출력
+		bw.flush();
+		bw.close();
+	}
+}
