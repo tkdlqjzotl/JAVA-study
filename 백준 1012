@@ -1,0 +1,111 @@
+package lecture0806;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+public class B1012 {
+	static class bachu {
+		int x;
+		int y;
+
+		bachu(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		//System.out.println(T);
+
+		//4방탐색을 위한 방향변수
+		int dx[] = { 1, 0, -1, 0 };
+		int dy[] = { 0, 1, 0, -1 };
+
+		for (int t = 0; t < T; t++) {
+			String str = br.readLine();
+			StringTokenizer st = new StringTokenizer(str);
+			int M = Integer.parseInt(st.nextToken());
+			int N = Integer.parseInt(st.nextToken());
+			int K = Integer.parseInt(st.nextToken());
+
+			int[][] map = new int[N][M];
+			
+			//흰색지렁이수와 4방탐색시에 시작위치를 저장
+			int bug = 0, nowx, nowy;
+			
+			//방문했나  stack에 푸쉬됏나를 저장하는 함수
+			boolean[][] isVisited = new boolean[N][M];
+			boolean[][] isPushed = new boolean[N][M];
+			for (int i = 0; i < K; i++) {
+				str = br.readLine();
+				st = new StringTokenizer(str);
+				int x = Integer.parseInt(st.nextToken());
+				int y = Integer.parseInt(st.nextToken());
+				map[y][x] = 1;
+			}
+			// dfs 너비우선탐색? 스택구현?
+			Stack<bachu> bs = new Stack<>();
+
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					//탐색시작위치 저장. 나중에 돌아오고 정상 for문으로 돌아오기 위함
+					nowx = j;
+					nowy = i;
+
+					//1인 위치를 찾고 방문하지않은 곳을 찾는다. 방문한걸 체크안하면 지렁이가 많이필요해진다
+					outer: while (map[i][j]==1&&!isVisited[i][j]) {
+						//현재위치는 추가됏고 방문됏으니 트루로 설정
+						isPushed[i][j]=true;
+						isVisited[i][j] = true;
+						
+						//4방탐색
+						for (int d = 0; d < 4; d++) {
+							int nx = j + dx[d];
+							int ny = i + dy[d];
+
+							//맵밖으로나가는경우 
+							if (nx < 0 || nx >= M || ny < 0 || ny >= N) {
+								continue;
+							}
+
+							//시작위치에서 시작하여 탐색진행중이다. 1인곳을방문하면 stack에 푸쉬하고. 그자리는푸쉬햇다고저장한다(아니면 중복푸쉬됨)
+							if (map[ny][nx] == 1 && !isPushed[ny][nx]) {
+								bs.push(new bachu(nx, ny));
+								isPushed[ny][nx]=true;
+								//System.out.println(nx+" "+ny+" "+bs.isEmpty());
+								continue;
+							}	
+						}
+						
+						//돌아다니며 사방탐색이 끝낫다. 이제 스택이 비어잇는지 확인한다 
+						//비어잇지않다면 스택을확인하여 맨위에잇는 배추의 x y좌표를 j i 에 넣고 탐색while문으로 다시 돌아간다.
+						//돌아가서는 다음꺼를 사방탐색하고 반복하는 식이다
+						//맨위에잇는것은 pop 
+						if (!bs.isEmpty()) {
+							j = bs.peek().x;
+							i = bs.peek().y;
+							bs.pop();
+							continue outer;
+						} 						
+						
+						//스택이 비어졋다 = 주위에모든 1 탐색완료. 그주위에서 필요한 한마리 추가 
+						//시작위치로 i j로 설정하고 정상포문 진행 
+						i = nowy;
+						j = nowx;						
+						bug++;
+					}					
+				}
+			}
+			System.out.println(bug);
+		}
+
+	}
+
+}
