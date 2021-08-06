@@ -1,0 +1,13 @@
+package lecture0806;
+
+import java.util.Scanner;
+
+public class B2941 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String s= sc.next();	
+		String []a= {"c=","c-","dz=","d-","lj","nj","s=","z="};	
+		for (String c : a) 	s=s.replace(c, "1");		
+		System.out.println(s.length());
+	}
+}
