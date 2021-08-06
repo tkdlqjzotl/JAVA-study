@@ -1,0 +1,55 @@
+package lecture0805;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.Buffer;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class PasswordGenerator {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		int T = 10;
+
+		int[] inputpw = new int[8];
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		for (int test_case = 1; test_case <= T; test_case++) {
+
+			test_case = Integer.parseInt(new StringTokenizer(br.readLine()).nextToken());
+			String str = br.readLine();
+			StringTokenizer st = new StringTokenizer(str);
+			for (int i = 0; i < 8; i++) {
+				inputpw[i] = Integer.parseInt(st.nextToken());
+			}
+			int cyclenum = 1;
+			int temp = 1;
+
+			while (temp != 0) {
+				while (cyclenum != 6 && temp != 0) {
+					temp = inputpw[0] - cyclenum;
+					if (temp < 0) {
+						temp = 0;
+					}
+					for (int i = 0; i < 7; i++) {
+						inputpw[i] = inputpw[i + 1];
+					}
+					inputpw[7] = temp;
+					cyclenum++;
+				}
+
+				cyclenum = 1;
+			}
+			System.out.print("#" + test_case + " ");
+			for (int i = 0; i < 8; i++) {
+				System.out.print(inputpw[i] + " ");
+			}
+			System.out.println("");
+
+		}
+	}
+
+}
