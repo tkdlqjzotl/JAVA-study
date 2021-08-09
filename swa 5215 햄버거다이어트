@@ -1,0 +1,75 @@
+package lecture0809;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class SWA5215 {
+	//최고점수, 제한칼로리, 햄버거정보는 변하지 않으니 스태틱선언
+	static int MaxPoint,L, point[][];
+	
+	//부분집합의 인덱스, 포함할건지아닌지, 부분집합마다 칼로리합,포인트합은 다랄지니까 매개변수로넣엇다
+	static void totalPoint(int cnt,boolean tf,int ks, int ps) {
+		//제한칼로리를 초과해버리면
+		if(ks>L)
+		{
+			ps-=point[cnt-1][0]; //현재는 마지막꺼에 다으믕로넘어온거니 저번꺼를 빼준게 최고포인트가될것이다
+			MaxPoint = (MaxPoint<ps)? ps:MaxPoint;//맥스보다크면 맥스에넣기
+			return ;	
+		}
+		
+		if(ks==L||cnt>=point.length)
+		{
+			MaxPoint = (MaxPoint<ps)? ps:MaxPoint;
+			return ;		
+		}		
+		
+		//현재꺼를 포함할지안할지 . 포인트와 칼로리 더해준다
+		if(tf) 
+		{
+			ps+=point[cnt][0];
+			ks+=point[cnt][1];			
+		}
+	
+		totalPoint(cnt+1,true,ks,ps);
+		totalPoint(cnt+1,false,ks,ps);		
+		
+	}
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine()); 
+
+		for (int t = 0; t < T; t++) {
+			MaxPoint=0; //최고점수는 테케마다 다르니 초기화
+			String str = br.readLine();
+			StringTokenizer st = new StringTokenizer(str);
+			int N = Integer.parseInt(st.nextToken()); 
+			L = Integer.parseInt(st.nextToken());//N,L입력부분 위에포함
+			point = new int[N][2];
+			//isSelected = new boolean[N];
+			int sum=0,sumPoint=0;
+
+			for (int i = 0; i < N; i++) {
+				str = br.readLine();
+				st = new StringTokenizer(str);
+				point[i][0] = Integer.parseInt(st.nextToken());
+				point[i][1] = Integer.parseInt(st.nextToken());
+			}
+			//point 햄버거 정보 입력부분 위에포함
+			
+			//부분집합구하기시작
+			totalPoint(0,true,sum,sumPoint);
+			totalPoint(0,false,sum,sumPoint);
+			 //결과값출력
+			System.out.println("#"+(t+1)+" "+MaxPoint);
+			
+		}
+
+	}
+
+}
