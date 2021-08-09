@@ -1,0 +1,44 @@
+package lecture0809;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class SWA1940 {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int T = Integer.parseInt(br.readLine());
+		
+		for (int i = 0; i < T; i++) {	
+			int v = 0,m=0;
+			int N = Integer.parseInt(br.readLine());
+					
+			for (int j = 0; j < N; j++) {
+				String str = br.readLine();
+				StringTokenizer st = new StringTokenizer(str);	
+				
+				switch (Integer.parseInt(st.nextToken())) {
+				case 0 :		
+					m  +=v;
+					break;
+				case 1 :
+					m  +=v;
+					v+=Integer.parseInt(st.nextToken());
+					break;
+				case 2 :
+					m  +=v;
+					v-=Integer.parseInt(st.nextToken());
+					if(v<0) v=0;
+					break;
+				}
+			}
+			m+=v;
+			System.out.println("#"+(i+1)+" "+m);
+		}
+	}
+
+}
