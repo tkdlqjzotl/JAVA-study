@@ -1,0 +1,125 @@
+package lecture0810;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class B7576 {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String str = br.readLine();
+		StringTokenizer st = new StringTokenizer(str);
+		int M = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
+		int map[][] = new int[N][M]; //토마토상자
+		Queue<tmt> tmtarr = new LinkedList<>(); //bfs쓰기위한큐
+
+		//초반에 다 익어잇는상태거나(0이없다) 익지못하는상황(1이없다)임을 체크,
+		//토마토는최소 1개라 햇으니 0이나 1만 체크하고 나머지는 다 없다고 생각하면 된다고 생각
+		int allWell=0,cantWell=0;
+		for (int i = 0; i < N; i++) {
+			str = br.readLine();
+			st = new StringTokenizer(str);
+			for (int j = 0; j < M; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if(map[i][j]==0)allWell=1; //0이 하나라도없으면  나머지토마토는1이니 다 익엇다고 가정
+				if(map[i][j]==1)cantWell=1; // 1이 하나라도없으면 나머지토마토는0이니 익지못하는상황이다
+			}
+		}		
+		
+		//위에 포문 돌린거 체크	
+		if(allWell==0) 	//0이 하나라도없으면  나머지토마토는1이니 다 익엇다고 가정
+		{
+			System.out.println(0);
+			return;
+		}
+		if(cantWell==0) // 1이 하나라도없으면 나머지토마토는0이니 익지못하는상황이다
+		{
+			System.out.println(-1);
+			return;
+		}
+		//사방탐색
+		int dx[] = { 1, -1, 0, 0 };
+		int dy[] = { 0, 0, 1, -1 };
+
+		
+		//일단 상자를 돌며 1이면 큐에 추가해둔다. 나중에 꼬일까봐 이렇게햇다.
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == 1) {
+					tmtarr.add(new tmt(j,i,0));
+				}
+			}
+		}		
+		
+		//토마토의 배열 tmtarr가 비어잇을떄까지 반복
+		while (!tmtarr.isEmpty()) {			
+			for (int d = 0; d < 4; d++) {
+				//제일먼저들어온 토마토의  x y 좌표를 받아온다
+				int nx = tmtarr.peek().x + dx[d];
+				int ny = tmtarr.peek().y + dy[d];
+				
+				//상자밖이거나 토마토가없는곳이면 가지마!
+				if (nx < 0 || nx >= M || ny < 0 || ny >= N || map[ny][nx] == -1) {
+					continue;
+				}
+				
+				//0이면 익힐수잇다 . 자신이 익은날짜 +1 해서 큐에추가해준다. 맵에도 그 날짜를 반영해준다.
+				// 여러곳에서 익은토마토1이잇고 최소로 익힐수 잇는 날짜가 각자 다를 수 있어서 				
+				if (map[ny][nx] == 0) {
+					tmtarr.add(new tmt(nx, ny,(tmtarr.peek().d+1)));
+					map[ny][nx]=(tmtarr.peek().d+1);
+				}				
+				
+				//맵에 반영한 날짜와 지금 익힐려고하는 날짜를 비교한다
+				//지금익힐수잇는 날짜가 작으면 반영한다. 
+				if (map[ny][nx]>tmtarr.peek().d+1)
+				{	
+					tmtarr.add(new tmt(nx, ny,(tmtarr.peek().d+1)));
+					map[ny][nx] =(tmtarr.peek().d+1);
+				}
+			}
+			
+			//도와준토마토는 버린다
+			tmtarr.poll();		
+		}
+		//맵을돌며 최대익힘날짜판명하기위한 max
+		int max= -1;
+		
+		outer : for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				//0이 하나라도 잇으면 익히지못한것이니 max=-1하고 for문탈출
+				if(map[i][j]==0)
+				{
+					max=-1;
+					break outer;				
+				}
+				//위에 if에 걸리지 않으면 map에서 제일 큰 숫자를 구한다
+				max= Math.max(max, map[i][j]);
+				
+			}
+		}
+		
+		System.out.println(max);
+	}
+
+}
+
+class tmt {
+	int x;
+	int y;
+	int d;
+
+	public tmt(int x, int y, int day) {
+		super();
+		this.x = x;
+		this.y = y;
+		this.d= day;
+	}
+
+}
