@@ -1,0 +1,36 @@
+package lecture0811;
+
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class B1592 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
+		int M = sc.nextInt();
+		int L = sc.nextInt();		
+		int []friend = new int[N];
+		
+		int cnt=-1;
+		int m=0;
+		int ind=0;
+		while(M!=m)
+		{
+			cnt++;
+			friend[ind]++;
+			m=friend[ind];
+			if(friend[ind]%2==1)
+			{
+				ind = (ind+L)%N;				
+			}
+			else
+			{
+				ind = (ind-L+N)%N;				
+			}
+		}
+		System.out.println(cnt);	
+	}
+
+}
