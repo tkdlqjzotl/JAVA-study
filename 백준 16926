@@ -1,0 +1,117 @@
+package lecture0811;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class B16926 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		String str = br.readLine();
+		StringTokenizer st = new StringTokenizer(str);
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int R = Integer.parseInt(st.nextToken());
+
+		int map[][] = new int[N][M];
+		int res[][] = new int[N][M];
+		int dx[] = { 0, 1, 0, -1 };
+		int dy[] = { 1, 0, -1, 0 };
+		int d = 0, level = 0, cnt = 0;
+		//주어진 숫자를 돌면서 뱉어내야되니까 큐를 생성
+		Queue<Integer> q = new LinkedList<Integer>();
+
+		for (int i = 0; i < N; i++) {
+			str = br.readLine();
+			st = new StringTokenizer(str);
+			for (int j = 0; j < M; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+
+		//0,0 1,1 2,2 .... n,n 에서 한바퀴도는거니까 시작점을 잡앗다
+		//맨바깥이 level이 0이고 안으로들어갈수록 증가. level이 근데 n,m의 작은값의 1/2보다 작아야한다
+		while (level < Math.min(N, M)/2) {
+			//방향과 지금몇개째인지를 세는 변수초기화
+			d = 0;
+			cnt = 0;
+			//위치를 level,level로 셋팅
+			int nx = level;
+			int ny = level;
+
+			//결과배열에 0이 안나올떄까지반복. 한바퀴를도는것을의미한다
+			while (res[ny][nx] == 0) {
+				//지금 돌고잇는데 몇번쨰인지 확인하는변수
+				cnt++;
+				
+				//주어진 map을 q에넣엇나 안넣엇나 확인하고 추가해준다 
+				if (map[ny][nx] != 0) {
+					q.add(map[ny][nx]);
+					map[ny][nx] = 0;
+				}				
+				//현재 cnt가 움직일 수만큼 움직이면 결과 배열에 넣기시작
+				if (cnt > R) {
+					res[ny][nx] = q.poll();
+					//넣은걸다썻다면 현재레벨탈출 한바퀴마무리 
+					if (q.isEmpty())
+						break;
+				}
+				
+				//위치는 방향값에따라 증가
+				nx += dx[d % 4];
+				ny += dy[d % 4];
+				//범위에벗어나거나 이동이완료된 바깥레벨을만난다면 방향변경. 
+				//방향은 하우상좌 이런식으로해놔서 안으로는 안간다 
+				while (nx < 0 || nx >= M || ny < 0 || ny >= N || res[ny][nx] != 0) {
+					nx -= dx[d % 4];
+					ny -= dy[d % 4];
+					d++;
+					nx += dx[d % 4];
+					ny += dy[d % 4];
+					continue;
+				}
+
+			}
+			//레벨추가. 안의 배열로 움직인다 
+			level++;			
+		}
+		//결과값출력 
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				bw.write(res[i][j] + " ");
+			}
+			bw.write("\n");
+		}
+
+		bw.flush();
+		bw.close();
+	}
+}
+
+/*
+ * int cnt=0; nowi=i; nowj=j;
+ * 
+ * 
+ * int nx = j + dx[d]; int ny = i + dy[d];
+ * 
+ * if (nx < 0 || nx >= M || ny < 0 || ny >= N) { d++; continue; }
+ * 
+ * 
+ * if(cnt>=R) { map[ny][nx]= map[i][j]; i=nowi; j=nowj; break; } else { cnt++;
+ * j=nx; i=ny; continue;
+ * 
+ * }
+ * 
+ * 
+ * if(i<2/N) { direction[i][j] } else {
+ * 
+ * 
+ * }
+ */
