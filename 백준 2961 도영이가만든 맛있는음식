@@ -1,0 +1,59 @@
+
+간단하게 부분집합구하는 문제 왜 실버1인지모르겟다
+
+배열돌리기가훨씬어려웟던듯
+
+
+package lecture0812;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class B2961 {
+	static int N;
+	static boolean[] isSelected;
+	static long sour[];
+	static long bad[];
+	static long MIN;
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		N = Integer.parseInt(br.readLine());
+		isSelected = new boolean[N];
+		sour = new long[N];
+		bad = new long[N];
+		MIN = Long.MAX_VALUE;
+		for (int i = 0; i < N; i++) {
+			String str = br.readLine();
+			StringTokenizer st = new StringTokenizer(str);
+			sour[i] = Long.parseLong(st.nextToken());
+			bad[i] = Long.parseLong(st.nextToken());
+		}
+
+		powerSet(0, 1, 0);
+		System.out.println(MIN);
+	}
+
+	static void powerSet(int cnt, long s, long b) {
+
+		if (cnt == N && s == 1 && b == 0) {
+			return;
+		}
+		if (cnt == N ) {
+			MIN = Math.min(Math.abs(s - b), MIN);
+			return;
+		}
+		// isSelected[cnt]=true;
+		powerSet(cnt + 1, s * sour[cnt], b + bad[cnt]);
+		// isSelected[cnt]=false;
+		powerSet(cnt + 1, s, b);
+
+	}
+
+}
