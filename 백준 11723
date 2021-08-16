@@ -1,0 +1,87 @@
+리스트 - 배열 - 비트마스킹 - 버퍼드라이터사용
+
+
+많이시도해봣다
+
+비트마스킹연습이된것같다
+
+
+
+
+
+
+
+
+
+
+
+
+package lecture0812;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class B11723_2 {
+
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		String str = br.readLine();
+		StringTokenizer st ;;//= new StringTokenizer(str);
+		int N = Integer.parseInt(str);
+		int S=0;
+		for (int i = 0; i < N; i++) {
+			str=br.readLine();
+			st = new StringTokenizer(str);
+			
+			String command = st.nextToken();		
+			switch (command) {
+			case "add":
+				int num =Integer.parseInt(st.nextToken());			
+				S=S|1<<num;			
+				break;
+			case "remove":
+				num = Integer.parseInt(st.nextToken());		
+				if((S&1<<num)!=0)
+					S-=1<<num;
+				break;
+			case "check":
+				num = Integer.parseInt(st.nextToken());		
+				if((S&1<<num)!=0)
+					bw.write(1+"\n");
+				else 
+					bw.write(0+"\n");				
+				break;
+			case "toggle":
+				num =Integer.parseInt(st.nextToken());		
+				if((S&1<<num)!=0)
+					S-=1<<num;
+				else 
+					S=S|1<<num;;
+				
+				break;
+			case "all":
+				S=S|(int)(Math.pow(2, 21)-1);
+				break;
+			case "empty":
+				S=0;
+				break;
+			
+			}
+			
+		}
+		bw.flush();
+		bw.close();
+		
+	}
+
+}
