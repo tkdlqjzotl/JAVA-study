@@ -1,0 +1,81 @@
+package lecture0813;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class B4963 {
+	static class pos{
+		int x;
+		int y;
+		public pos(int x, int y) {
+			super();
+			this.x = x;
+			this.y = y;
+		}	
+		
+		
+	}
+	public static void main(String[] args) {
+		int w,h;
+		Scanner sc = new Scanner(System.in);
+		int dx[] = {1,1,1,0,0,-1,-1,-1};
+		int dy[] = {1,0,-1,1,-1,1,0,-1};
+		Queue<pos> q = new LinkedList<>();
+		while(true)
+		{
+			q.clear();
+			int islandCnt=0;
+			w = sc.nextInt();
+			h= sc.nextInt();
+			if( w==0&&h==0)
+				break;
+			int map[][] = new int[h][w];
+			boolean isVisited[][] = new boolean[h][w];
+			
+			for (int i = 0; i < h; i++) {
+				for (int j = 0; j < w; j++) {
+					map[i][j]=sc.nextInt();
+				}
+			}
+			
+			for (int i = 0; i < h; i++) {
+				for (int j = 0; j < w; j++) {
+					if(map[i][j]==1&&!isVisited[i][j])
+					{
+						q.add(new pos(j,i));	
+						isVisited[i][j]=true;
+					}
+					
+					while(!q.isEmpty())
+					{
+						for (int d = 0; d < 8; d++) {
+							int nx =  q.peek().x +dx[d];							
+							int ny =  q.peek().y +dy[d];
+							
+							if(nx<0||nx>=w||ny<0||ny>=h||isVisited[ny][nx])
+								continue;
+							
+							if(map[ny][nx]==1)
+								{
+									q.add(new pos(nx,ny));
+									isVisited[ny][nx]=true;
+								}
+							
+						}
+						q.poll();
+						if(q.isEmpty())
+						{
+							islandCnt++;
+						}
+					}
+					
+				}
+			}
+			
+			System.out.println(islandCnt);
+		}
+
+	}
+
+}
