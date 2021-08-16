@@ -1,0 +1,177 @@
+package lecture0813;
+
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class B17135 {
+	static int N, M, D, MAX = 0, tempsum;
+	// 입력받는 n m d 와 죽일수잇는 최대숫자 MAX, 궁수의 위치에따른 죽일수잇는 적의 임시변수 tempsum
+	static boolean isDebug = false, isKill = false;
+	static int map[][], origin[][]; // 입력받을 map과 원본을 저장할 origin
+	static int archurPos[] = new int[3]; // 궁수의 위치 배열
+	static int dx[] = { -1, 0, 1 }; // bfs로 적을 찾아갈거기 때문에
+	static int dy[] = { 0, -1, 0 };// 아래로가는경우는 없으니 좌 상 우만 탐색한다
+	static Deque<pos> q = new LinkedList<>(); // 큐 선언
+	static boolean isVisited[][]; // 혹시나 방문했떤 곳을 또 갈까봐 선언
+
+	// 적이나 궁수의 pos를 저장하기위한 클래스
+	static class pos {
+		int x;
+		int y;
+
+		public pos(int x, int y) {
+			super();
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+		N = sc.nextInt();
+		M = sc.nextInt();
+		D = sc.nextInt();
+		// 궁수의위치까지 나중에 저장할거기 떄문에 배열의 높이를 N+1 선언
+		map = new int[N + 1][M];
+		origin = new int[N + 1][M];
+		isVisited = new boolean[N + 1][M];
+
+		// 맵 입력
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				map[i][j] = sc.nextInt();
+				origin[i][j] = map[i][j];
+			}
+		}
+
+		// 궁수의위치를 뽑아내는 조합 시작
+		combination(0, 0);
+		System.out.println(MAX);
+	}
+
+	static void combination(int cnt, int ind) {
+		if (cnt == 3) { // 궁수의 위치 3개를 정한순간
+			q.clear();// 큐 초기화
+			tempsum = 0; // 죽일수잇는 적의 수 초기화
+
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					map[i][j] = origin[i][j]; // 맵 원래상태 저장
+				}
+			}
+			map[N] = new int[M]; // 궁수의 위치를 저장하는 맨아래 N번째 줄 초기화
+			for (int i = 0; i < 3; i++) {
+				map[N][archurPos[i]] = 1; // map위의 궁수의 위치에 해당하는곳에 1
+			}
+			if (isDebug) {
+				System.out.println("combination 	" + Arrays.toString(map[N]));
+				System.out.println("originmap 		" + Arrays.deepToString(map));
+			}
+			MAX = Math.max(MAX, playGame()); // playgame 시작하고 max랑비교해서 return값이
+			// 더크다면 max에 넣음
+			return;
+		}
+
+		// 조합을 구하는 코드
+		for (int i = ind; i < M; i++) {
+			archurPos[cnt] = i;
+			combination(cnt + 1, i + 1);
+		}
+	}
+
+	static int playGame() {// 게임시작
+		for (int g = 0; g < N; g++) { // 세로줇만큼 이동하기때문에 N번반복
+			for (int i = 0; i < 3; i++) { // 궁수의 위치가 왼쪽인순부터 큐에 추가하고 죽일애 정하는 식으로 구현
+				q.offer(new pos(archurPos[i], N));
+				isKill = false;// 한 궁수가 죽였나 체크하는 변수 초기화
+				isVisited = new boolean[N + 1][M]; // 각 궁수가 방문하는곳은 다르니 초기화
+				killEnemy(1);
+			}
+			if (isDebug)
+				System.out.println("playGame		" + Arrays.deepToString(map));
+			// 죽일애 정햇으니 맵 정리코드
+			arrangeMap();
+			if (isDebug)
+				System.out.println("arrange after		" + Arrays.deepToString(map));
+		}
+		if (isDebug)
+			System.out.println(tempsum);
+		// 궁수의 한 포지션에 턴이 다 끝낫다 죽일수잇는 적의 합 리턴
+		return tempsum;
+	}
+
+	static void killEnemy(int tempd) { // 궁수 한명이 죽이는 사람을 정하는 코드
+
+		// 사정거리보다 멀어졌다 q초기화 후 그 메소드 종료
+		if (tempd > D || isKill) {
+			q.poll();
+			return;
+		}
+		int tempq = q.size();
+		
+		if (!q.isEmpty()) {
+			for (int ts = 0; ts < tempq; ts++) { //들어올 당시의 q의 사이즈만큼만 반복해야함 무조건 
+				// if (!q.isEmpty()) {// 탐색을꼐속하며 큐가비어잇지않으면 세방향을 탐색하게 구현
+				int qx = q.peek().x;
+				int qy = q.peek().y;
+				for (int d = 0; d < 3; d++) {
+					int nx = qx + dx[d]; // 현재큐의맨앞의 위치 출력후 이동
+					int ny = qy + dy[d];
+					// 범위 벗어나거나 방문거나 이미 적을 중인 상태라면 다른방향으로 진행
+					if (nx < 0 || nx >= M || ny < 0 || ny >= N || isVisited[ny][nx] || isKill) {//
+						continue;
+					}
+					if (map[ny][nx] == 0) {
+						// 비어잇는곳이라면 탐색을위해 q에추가후 방문했다고 저장
+						q.offer(new pos(nx, ny));
+						isVisited[ny][nx] = true;
+						if (isDebug) {
+							System.out.print("tempd" + tempd + "x" + q.peekLast().x + "y" + q.peekLast().y + " "
+									+ "qsize" + q.size() + "iskill" + isKill);
+							System.out.println();
+						}
+					}
+					// 적을발견했다. 그럼 동시에 죽일수도잇으니 바로 0을취하지않고 ++해줌
+					if (map[ny][nx] > 0) {
+						map[ny][nx]++;
+						q.clear();
+						isKill = true;// 다음 kill이 실행되지않게 죽였다는 변수를 true로 설정
+						return;
+					}
+				}
+				q.poll(); //삼방향탐색이끝나면 맨앞의 큐에 담겨잇는걸 뽑기 
+			}
+			killEnemy(tempd + 1);// 거리 +1해서 죽일수잇는애 찾아보기
+		}
+		q.clear(); //킬에니미가 끝나면 다른 것에 방해가 되지 않게 비우기 
+
+	}
+
+	// 궁수가 죽일수잇는애를 map에서 ++하고나면 죽여야되니 0을만들어야함 , 그순간 죽일수잇는적도 ++
+	static void arrangeMap() {
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] > 1) {
+					map[i][j] = 0;
+					tempsum++;
+				}
+			}
+		}
+		if (isDebug)
+			System.out.println("kill after		" + Arrays.deepToString(map));
+		// 적이 한칸씩다가오게 맵을 한줄씩 내려오게함
+		for (int i = N - 1; i >= 1; i--) {
+			for (int j = 0; j < M; j++) {
+				// System.out.println("playGame"+Arrays.deepToString(map));
+				map[i][j] = map[i - 1][j];
+			}
+		}
+		map[0] = new int[M];
+		// System.out.println("arrangeMap e" + Arrays.deepToString(map));
+
+	}
+}
