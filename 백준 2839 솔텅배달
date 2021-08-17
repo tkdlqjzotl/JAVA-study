@@ -1,0 +1,28 @@
+package lecture0817;
+
+import java.util.Scanner;
+
+public class B2839 {
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+
+		int N = sc.nextInt();
+		int a = N / 5;
+		int min = Integer.MAX_VALUE;
+
+		while (a >= 0) {
+			int m = N - a * 5;
+			if (m % 3 == 0) {
+				min = Math.min((a) + (m / 3), min);
+			}
+			a--;
+		}
+		if (min == Integer.MAX_VALUE)
+			System.out.println(-1);
+		else
+			System.out.println(min);
+	}
+
+}
