@@ -1,0 +1,56 @@
+package lecture0817;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
+class time {
+	int st;
+	int et;
+
+	public time(int st, int et) {
+		super();
+		this.st = st;
+		this.et = et;
+	}
+}
+
+public class B1931 {
+	static List<time> timeList;
+	static List<time> resList;
+	static int max = Integer.MIN_VALUE;
+	static boolean[] isSelected;
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		timeList = new ArrayList<>();
+		resList = new ArrayList<>();
+		int N = sc.nextInt();
+		for (int i = 0; i < N; i++) {
+			timeList.add(new time(sc.nextInt(), sc.nextInt()));
+		}
+		isSelected = new boolean[timeList.size()];
+
+		Collections.sort(timeList, (o1, o2) -> {
+			if (o1.et != o2.et)
+				return o1.et - o2.et;
+			else
+				return o1.st - o2.st;
+		});
+		calTime(0, 0);
+		System.out.println(max);
+	}
+
+	private static void calTime(int cnt, int ind) {
+		for (int i = ind; i < timeList.size(); i++) {
+			if (resList.isEmpty() ||( cnt>0&&resList.get(cnt-1).et <= timeList.get(i).st)) {
+				resList.add(timeList.get(i));
+				cnt++;
+				//calTime(cnt + 1, i + 1);
+			}
+		}		
+		max = Math.max(cnt, max);
+		//resList.clear();
+	}
+}
