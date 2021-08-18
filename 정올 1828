@@ -1,0 +1,61 @@
+package lecture0817;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+class temp{
+	int low;
+	int high;
+	public temp(int low, int high) {
+		super();
+		this.low = low;
+		this.high = high;
+	}	
+}
+public class J1828 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
+		List<temp> tempList = new ArrayList<>();
+		
+		List<Integer> refList = new ArrayList<>();
+		
+		for (int i = 0; i <N; i++) {
+			tempList.add(new temp(sc.nextInt(),sc.nextInt()));
+		}
+		
+		Collections.sort(tempList, (o1, o2)->{
+			if(o1.high!=o2.high)
+				return o1.high-o2.high;
+			else
+				return o1.low-o2.low;
+		});
+		/*for (int i = 0; i <N; i++) {
+			System.out.println(tempList.get(i).low+" " +tempList.get(i).high);
+		}*/
+		
+		int i=0,tempi=0;
+		while(i<tempList.size())
+		{
+			refList.add(tempList.get(i).high);
+			for (int j = i+1; j < tempList.size(); j++) {
+				if( refList.get(tempi)>=tempList.get(j).low)//refList.get(tempi)<tempList.get(j).high &&
+					{
+						i++;
+						continue;
+					}
+				else 
+					break;
+			}
+			
+			i++;
+			tempi++;
+		}
+		
+		System.out.println(refList.size());
+	}
+
+}
