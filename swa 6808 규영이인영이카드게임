@@ -1,0 +1,74 @@
+package lecture0813;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class SWA6808 {
+	static int KCard[];//규영이가들고있는카드배열
+	static int ICard[];//인영이가들고있는카드배열
+	static int win, lose;//규영이의 승수 패수
+	static Boolean[] isSelected ; //순열을 만들기위한 선택변수
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		for (int t = 0; t < T; t++) {
+			isSelected = new Boolean[9];
+			KCard = new int[9];
+			ICard = new int[9];
+			win=0;lose=0;
+			//테스트케이스마다초기화
+			int num[] = new int[19];//규영이가받은 숫자제외한걸 인영이한테주기위한 1~18숫자 배열
+			String str = br.readLine();
+			StringTokenizer st = new StringTokenizer(str);
+
+			for (int i = 0; i < KCard.length; i++) {
+				KCard[i] = Integer.parseInt(st.nextToken());
+				num[KCard[i]]++;
+				isSelected[i]=false;
+			}//규영카드와 선택 배열 초기화
+
+			int ind=0;
+			for (int i = 1; i <= 18; i++) {
+				if (num[i] == 0) {
+					ICard[ind] = i;
+					ind++;
+				}
+			}//규영이꺼제외한 카드를 인영이의 배열 입력
+			
+			permutation(0, new int[9]);//순열구하기 출발~! 
+			System.out.println("#"+(t+1)+" "+win+" "+lose);
+		}
+
+	}
+
+	static void permutation(int cnt, int r[]) {
+		if (cnt == 9) {
+			//9개순열 다 구하면 규영 포인트 인영포인트 구하기
+			int KPoint = 0,IPoint = 0;
+			//인영이가내는거에따라 누가이기는지 체크하고 포인트추가해주기
+			for (int i = 0; i <9; i++) {
+				if(KCard[i]>r[i]) KPoint+=KCard[i]+r[i];
+				else IPoint+=KCard[i]+r[i];	
+			}
+			//포인트총합이 크면 규영이 승수 추가
+			if(KPoint>IPoint) win++;
+			else lose++;
+			return;
+		}
+		for (int i = 0; i < 9; i++) {
+			//순열구하기 선택되지않은수여야 배열에 추가 
+ 			if (!isSelected[i]) {
+				r[cnt]= ICard[i];
+				isSelected[i] = true;
+				//결과배열을 다음순열구하기메소드에전달해줘야 각각의 배열이 유지되는 것 같음
+				permutation(cnt + 1, r);
+				isSelected[i] = false;
+			}
+		}
+
+	}
+
+}
