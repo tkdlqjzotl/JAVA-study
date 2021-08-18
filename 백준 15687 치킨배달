@@ -1,0 +1,157 @@
+package lecture0813;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
+//집의 위치 클래스
+class pos {
+	int x;
+	int y;
+
+	public pos(int x, int y) {
+		super();
+		this.x = x;
+		this.y = y;
+	}
+}
+
+public class B15687_2 {
+	//입력받는 N M, 각각의집마다 치킨집과의 거리를담을변수 , 치킨거리최솟값
+	static int N, M, templength, MIN = Integer.MAX_VALUE;
+	static List<pos> house; //집의 위치 리스트
+	static Queue<pos> temphouse; // bfs를위한 임시 위치 리스트
+	static List<pos> chicken;//치킨집 위치 리스트
+	static int map[][]; //입력받는 맵
+	static boolean isVisited[][]; // 방문했나 체크하는 배열
+	static int distanceArr[][]; //집과 치킨집과의 거리를 담을 변수, 
+	// distancearr[1][2] 면은 1번집과 2번치킨집과의 거리
+	// 맵을받자마자 이 배열을 채운다 시간단축,조합에 쓸떄를 위해
+	static int indexMap[][];	//위치에 몇번재 집이잇나 치킨집이잇나 배열
+	static int nowhouseIndex, nowChickenFind;
+	//각각의 집에서 치킨집과의거리를 구할 떄 현재 무슨집에서찾고잇는지, 치킨집몇개찾앗는지
+	static int combChicken[];
+	//조합에 쓸 치킨의 인덱스 배열
+
+	public static void main(String[] args) {
+		//입력 및 초기화
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		M = sc.nextInt();
+		house = new LinkedList<>();
+		chicken = new LinkedList<>();
+		temphouse = new LinkedList<>();
+		map = new int[N][N];
+		indexMap = new int[N][N];
+		nowhouseIndex = 0;
+		nowChickenFind = 0;
+		combChicken = new int[M];
+		isVisited = new boolean[N][N];
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				map[i][j] = sc.nextInt();
+				// 집 입력받고 집리스트에 추가 및 인덱스맵에 몇번째 인덱스인지 설정
+				if (map[i][j] == 1) {
+					house.add(new pos(j, i));
+					indexMap[i][j] = house.size() - 1;
+				}
+				// 치킨집 입력받고 치킨집리스트에 추가 및 인덱스맵에 몇번째 인덱스인지 설정
+				if (map[i][j] == 2) {
+					chicken.add(new pos(j, i));
+					indexMap[i][j] = chicken.size() - 1;
+				}				
+			}
+		}
+
+		//집과 치킨집의 크기만 큼 거리배열 생성
+		distanceArr = new int[house.size()][chicken.size()];
+
+		dByHouse(); // 집별로 거리를 체크하는 함수
+		combination(0, 0); // 어느 치킨집을 살릴지 구하는 조합 함수
+		System.out.println(MIN);
+	}
+
+	static void combination(int cnt, int ind) {
+		if (cnt == M) {
+			int sum = 0;
+			//조합에서 뽑아낸 치킨 인덱스 활용하여  combChicken
+			// 세로인덱스 j에 따라 제일 작은 거리의 치킨집을 찾고 sum에 더한다
+			for (int j = 0; j < house.size(); j++) {
+				int min=Integer.MAX_VALUE;
+				for (int i = 0; i < combChicken.length; i++) {
+					min=Math.min(distanceArr[j][combChicken[i]] , min);
+				}
+				sum += min;
+			}
+			//sum이 최저치킨거리인가?
+			MIN = Math.min(sum, MIN);
+			return;
+		}
+
+		for (int i = ind; i < chicken.size(); i++) {
+			combChicken[cnt] = i;
+			combination(cnt + 1, i + 1);
+		}
+	}
+
+	private static void dByHouse() {//집별로 거리찾기
+		for (int i = 0; i < house.size(); i++) {
+			nowhouseIndex = i; //지금 몇번쨰 집에서 각각의 치킨집거리를 구하고잇나
+			nowChickenFind = 0; //치킨집몇개를찾앗나
+			templength = 1;//치킨집과의거리 변수
+			isVisited = new boolean[N][N];//방문배열초기화
+			temphouse.add(house.get(i));//현재 집을 큐에 추가
+			calMin(); //치킨집찾기
+			temphouse.clear();//큐 초기화
+		}
+	}
+
+	private static void calMin() { //집에서 치킨집마다 거리 찾기
+		int dx[] = { 1, -1, 0, 0 };
+		int dy[] = { 0, 0, 1, -1 };
+		//함수에 들어올때의 큐사이즈만큼만 반복
+		int qsize = temphouse.size();
+		for (int qq = 0; qq < qsize; qq++)
+		{
+			//q의 맨앞에 꺼를 방문
+			isVisited[temphouse.peek().y][temphouse.peek().x] = true;
+			//사방탐색
+			for (int d = 0; d < 4; d++) {
+				int nx = temphouse.peek().x + dx[d];
+				int ny = temphouse.peek().y + dy[d];
+				//범위벗어나거나 방문햇으면 다른방향
+				if (nx < 0 || nx >= N || ny < 0 || ny >= N || isVisited[ny][nx]) {
+					continue;
+				}
+				//제대로되는곳이면 방문했다하고 방문큐에 추가
+				isVisited[ny][nx] = true;
+				temphouse.add(new pos(nx, ny));
+				//치킨집발견하면 지금돌고잇는 거리를 거리배열에 추가해줌
+				// [현재집의 인덱스][치킨집의 인덱스] = 거리 
+				if (map[ny][nx] == 2) {
+					distanceArr[nowhouseIndex][indexMap[ny][nx]] = templength;
+					nowChickenFind++; //치킨집찾앗다
+					if (nowChickenFind >= chicken.size()) {
+						//다찾앗으면 bfs마무리
+						return;
+					}
+				}
+			}			
+			temphouse.poll(); //다돌았으면 쓴 큐 버리기
+		}
+		templength++;//거리추가
+		calMin();//재귀
+	}
+}
+
+//조합 뽑고 - 거기서 조합마다 최소거리구하면서 bfs 시간초과남
+
+//미리 닭집별로 집까지의 거리를 저장해두고 닭집별로 구하면 치킨거리가안구해질거같아
+
+//미리 집별로 닭집과의 거리를 다 구한다 
+//1번집 1번닭집과 2    2번닭집과 3번
+//만약에 조합이나온다면 그조합에맞는 닭집만 true해서
+//거기서 최솟값을 다더하고
+//기존최솟값과 비교
