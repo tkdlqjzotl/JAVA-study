@@ -1,0 +1,46 @@
+package lecture0816;
+
+import java.util.Scanner;
+
+public class S7272 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int T;
+		T=sc.nextInt();
+		String zeroHole = "CEFGHIJKLMNSTUVWXYZ";
+		String oneHole = "ADOPQR";
+		for(int test_case = 1; test_case <= T; test_case++)
+		{
+			String left =sc.next();
+			String right = sc.next();
+			
+			left = left.replaceAll("C|E|F|G|H|I|J|K|L|M|N|S|T|U|V|W|X|Y|Z", "0");
+			right = right.replaceAll("C|E|F|G|H|I|J|K|L|M|N|S|T|U|V|W|X|Y|Z", "0");
+			left = left.replaceAll("A|D|O|P|Q|R", "1");
+			right = right.replaceAll("A|D|O|P|Q|R", "1");
+			
+			
+			
+		/*	for (int i = 0; i < zeroHole.length(); i++) {
+				left = left.replace(zeroHole.charAt(i), '0');
+				
+				right = right.replace(zeroHole.charAt(i), '0');
+				
+			}*/
+			
+			/*for (int i = 0; i < oneHole.length(); i++) {
+				left = left.replace(oneHole.charAt(i), '1');	
+				right = right.replace(oneHole.charAt(i), '1');	
+			}*/
+			
+			
+			if(left.equals(right))
+				System.out.println("#"+test_case+" SAME");
+			else
+				System.out.println("#"+test_case+" DIFF");
+			
+		}
+	}
+
+}
