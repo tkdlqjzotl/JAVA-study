@@ -1,0 +1,65 @@
+package lecture0820;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Stack;
+
+public class S1223 {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		Stack<Integer> numberStack = new Stack<>();
+		Stack<Character> opratorStack = new Stack<>();
+		char[] carr;
+		for (int t = 0; t <10; t++) {
+			int length,sum=0,temp=1;;
+			length = Integer.parseInt(br.readLine());
+			carr= new char[length];
+			carr= br.readLine().toCharArray();
+			for (int j = 0; j < carr.length; j++) {
+				if(carr[j]=='*'||carr[j]=='+')
+				{
+					opratorStack.push(carr[j]);			
+				}
+				else
+				{
+					numberStack.push(Integer.parseInt(carr[j]+""));					
+				}
+			}
+			//temp=temp*numberStack.pop();
+			while(!opratorStack.isEmpty())
+			{				
+				if(opratorStack.size()==1)
+				{
+					if(opratorStack.pop()=='+')
+					{
+						sum=sum+temp*numberStack.pop()+numberStack.pop();
+						break;
+					}
+					else
+					{
+						sum= sum+temp*numberStack.pop()*numberStack.pop();
+						break;
+					}
+				}
+				
+				if(opratorStack.pop()=='+')
+				{
+					sum+=temp*numberStack.pop();
+					temp=1;
+				}
+				else
+				{
+					temp*=numberStack.pop();
+				}				
+			}
+			bw.write("#"+(t+1)+" "+sum+"\n");
+		}
+		bw.flush();
+		bw.close();
+	}
+
+}
