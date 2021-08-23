@@ -1,0 +1,84 @@
+package lecture0823;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class B1260 {
+	static int N;
+	static List<Integer>[] listArr;
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static boolean isVisited[];
+	
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		String str = br.readLine();
+		StringTokenizer st = new StringTokenizer(str);
+		N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int V = Integer.parseInt(st.nextToken());
+
+		listArr = new ArrayList[N + 1];
+		for (int i = 0; i < N+1; i++) {
+			listArr[i] = new ArrayList<>();			
+		}
+		isVisited = new boolean[N+1];
+		int from,to;
+		for (int i = 0; i < M; i++) {
+			str = br.readLine();
+			st = new StringTokenizer(str);
+			from = Integer.parseInt(st.nextToken());
+			to = Integer.parseInt(st.nextToken());
+			listArr[from].add(to);
+			listArr[to].add(from);
+		}
+		
+		for (int i = 0; i < N+1; i++) {
+			Collections.sort(listArr[i]);		
+		}
+		
+		dfs(V, new boolean[N + 1]);
+		bw.write("\n");
+		isVisited[V]=true;
+		bfs(V);
+		bw.flush();
+		bw.close();
+	}
+
+	private static void bfs(int cur) throws IOException {
+		Queue<Integer>  q= new LinkedList<>();
+		q.offer(cur);
+		
+		while(!q.isEmpty())
+		{
+			for (int i = 0; i < listArr[q.peek()].size(); i++) {
+				if (!isVisited[listArr[q.peek()].get(i)]) {
+						q.offer(listArr[q.peek()].get(i));
+						isVisited[listArr[q.peek()].get(i)]=true;
+				}
+			}
+			bw.write(q.poll()+" ");
+		}
+	}
+
+	private static void dfs(int cur, boolean[] bs) throws IOException {
+		bs[cur] = true;
+		bw.write(cur + " ");
+		for (int i = 0; i < listArr[cur].size(); i++) {
+			if (!bs[listArr[cur].get(i)]) {
+				dfs(listArr[cur].get(i), bs);
+			}
+		}
+	}
+
+}
