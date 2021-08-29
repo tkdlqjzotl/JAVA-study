@@ -1,0 +1,48 @@
+부분집합 과 순열헷갈림
+여러가지중하나만출력 
+
+
+package lecture0829;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class B2309 {
+	static int[] nan ,real;
+	static boolean isFind=false;
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		nan = new int[9];
+		real = new int[7];
+		for (int i = 0; i < 9; i++) {
+			nan[i]=sc.nextInt();
+		}
+		
+		powerset(0,0,0);
+	}
+	
+	private static void powerset(int cnt,int ind,int sum) {
+		if(sum>100 ||isFind)
+			return;
+		
+		if(cnt==7)
+		{
+			if(sum==100)
+			{
+				Arrays.sort(real);
+				for (int i = 0; i < 7; i++) {
+					System.out.println(real[i]);
+				}				
+				isFind=true;
+			}
+			return;
+		}
+		
+		for (int j = ind; j < 9; j++) {
+				real[cnt]=nan[j];
+				powerset(cnt+1,j+1,sum+nan[j]);	
+		}		
+	}
+
+}
