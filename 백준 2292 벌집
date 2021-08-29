@@ -1,0 +1,29 @@
+package lecture0829;
+
+import java.util.Scanner;
+
+public class B2292 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+		long l = sc.nextLong();		
+		if(l==1)
+		{
+			System.out.println(1);
+			return;
+		}
+		int i = 2,sum=2;
+		while (true) {
+			if (l < sum) {
+				System.out.println(i-1);
+				return;
+			}
+			else
+			{
+				sum+= 6*(i-1);	
+				i++;
+			}
+
+		}
+	}
+}
