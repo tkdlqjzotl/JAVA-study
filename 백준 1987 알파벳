@@ -1,0 +1,134 @@
+package lecture0818;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+public class B1987 {
+	static int R, C, MAX;//, limit
+	static boolean alpha[];
+	static int map[][];
+	//static boolean isVisited[][];
+	static int[] dx = { 0, 0, 1, -1 };
+	static int[] dy = { 1, -1, 0, 0 };
+	//static Stack<pos> ps;
+
+	/*static class pos {
+		int x;
+		int y;
+
+		public pos(int x, int y) {
+			super();
+			this.x = x;
+			this.y = y;
+		//	isVisited[y][x] = true;
+			alpha[map[y][x] - 'A'] = true;
+		}
+	}
+*/
+	public static void main(String[] args) throws IOException {
+		// Scanner sc = new Scanner(System.in);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+		alpha = new boolean['Z' - 'A' + 1];
+		map = new int[R][C];
+	//	isVisited = new boolean[R][C];
+	//	limit = 0;
+		MAX = 1;
+
+		for (int r = 0; r < R; r++) {
+			String str = br.readLine();
+			for (int c = 0; c < C; c++) {
+				map[r][c]=str.charAt(c)-'A';
+			}
+		}
+		/*
+		 * for (int r = 0; r < R; r++) { for (int c = 0; c < C; c++) { alpha[map[r][c] -
+		 * 'A']=true; } }
+		 */
+
+/*		for (int a = 0; a < alpha.length; a++) {
+			if (alpha[a]) {
+				// System.out.print((char) ('A' + a) + " " + alpha[a]);
+				limit++;
+			}
+		}
+		if(limit>=R*C)
+		{
+			System.out.println(limit);
+			return;			
+		}*/
+	//	System.out.println(limit);
+		//alpha = new boolean['Z' - 'A' + 1];
+		//ps = new Stack<>();
+	//ps.push(new pos(0, 0));
+		dfs(0,0,0);
+		System.out.println(MAX);
+	}
+
+	private static void dfs(int x,int y, int i) {
+		// MAX = Math.max(i, MAX);
+		if (alpha[map[x][y]]) { // 0,0에 저장된 알파벳이 이미 한번 방문한 알파벳이라면,
+			MAX = Math.max(MAX, i); // 정답을 갱신해준다.
+			return; // 조건에 만족하므로 리턴.
+		} else {
+			alpha[map[x][y]] = true;
+			for (int d = 0; d < 4; d++) {
+				int nx = x + dx[d];
+				int ny = y + dy[d];
+
+				if (nx >= 0 && ny >= 0 && nx < R && ny < C) {
+					dfs(nx, ny, i + 1);
+				}
+
+			}
+
+			alpha[map[x][y]] = false;
+
+		}
+
+		/*for (int d = 0; d < 4; d++) {
+			//System.out.println("탐색"+i+MAX);
+			if (MAX >= limit) {
+				return;
+			}
+			int nx = ps.peek().x + dx[d];
+			int ny = ps.peek().y + dy[d];
+
+			if (nx < 0 || nx >= C || ny < 0 || ny >= R  || alpha[map[ny][nx] - 'A']) {
+				continue;
+			}//|| isVisited[ny][nx]
+
+			// isVisited[ny][nx] = true;
+			// alpha[map[ny][nx] - 'A'] = true;
+
+			MAX = Math.max(i + 1, MAX);
+			//System.out.println("추가"+i+MAX);
+			if (MAX >= limit) {
+				return;
+			}
+			ps.push(new pos(nx, ny));
+			//System.out.println(ps.peek().x+" "+ps.peek().y);
+			dfs(i + 1);
+		}
+		if(MAX>=i)
+		{return;}
+		
+		
+	 * for (pos pss : ps) {
+			System.out.print(pss.x+" "+pss.y+" " + i+" ");
+		}
+		System.out.println();
+		
+		
+	//	isVisited[ps.peek().y][ps.peek().x] = false;
+		alpha[map[ps.peek().y][ps.peek().x] - 'A'] = false;
+		ps.pop();
+*/
+	}
+}
