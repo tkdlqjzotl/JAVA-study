@@ -1,0 +1,31 @@
+입력다받고 각각의 남/여 학년에 몇명잇는지를 추가해놓고
+제한인원보다커지면 방개수추가해주는식
+
+package lecture0830;
+
+import java.util.Scanner;
+
+public class B13300 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n= sc.nextInt();
+		int k= sc.nextInt();
+		int [][]stu = new int [2][7];
+		
+		for (int i = 0; i < n; i++) {			
+			stu[sc.nextInt()][sc.nextInt()]++;
+		}
+		int sum=0;
+		for (int i = 0; i < 2; i++) {			
+			for (int j = 1; j < 7; j++) {	
+				if(stu[i][j]%k==0)
+					sum+=stu[i][j]/k;	
+				else
+					sum+=stu[i][j]/k+1;	
+			}
+		}
+		System.out.println(sum);
+	}
+
+}
