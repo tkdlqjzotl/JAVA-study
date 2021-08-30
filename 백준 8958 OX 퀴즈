@@ -1,0 +1,33 @@
+package lecture0830;
+
+처음엔 스택으로 풀엇는데 그냥 변수로 줘도 됐었따
+
+import java.util.Scanner;
+import java.util.Stack;
+
+public class B8958 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt(),sum;
+		int tempsum;
+		String str ;
+		for (int i = 0; i < n; i++) {
+			sum=0;
+			tempsum=0;
+			str = sc.next();			
+			for (int j = 0; j < str.length(); j++) {	
+				if(str.charAt(j)=='O')
+				{
+					tempsum++;
+					sum+=tempsum;
+				}
+				else
+					tempsum=0;
+			}
+			System.out.println(sum);
+		}
+
+	}
+
+}
