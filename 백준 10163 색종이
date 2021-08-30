@@ -1,0 +1,36 @@
+package lecture0830;
+
+import java.util.Scanner;
+
+public class B10163 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int sx,sy,ex,ey;
+		int map[][] = new int[1001][1001];
+		for (int N = 0; N < n; N++) {
+			sx= sc.nextInt();
+			sy=sc.nextInt();
+			ex=sc.nextInt()-1+sx;
+			ey= sc.nextInt()-1+sy;
+			for (int i = sy; i <= ey; i++) {
+				for (int j = sx; j <= ex; j++) {
+						map[i][j]=N+1;
+				}
+			}			
+		}
+		int []see = new int[n+1];
+		for (int i = 0; i < 1001; i++) {
+			for (int j = 0; j <1001; j++) {
+					see[map[i][j]]++;
+			}
+		}	
+		
+		
+		for (int i = 1; i < n+1; i++) {
+			System.out.println(see[i]);
+		}
+		
+	}
+}
