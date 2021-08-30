@@ -1,0 +1,22 @@
+package lecture0829;
+
+import java.util.Scanner;
+
+public class B3052 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		boolean [] num = new boolean[42];
+		for (int i = 0; i < 10; i++) {
+			num[sc.nextInt() %42]=true;
+		}
+		int sum=0;
+		for (int i = 0; i < 42; i++) {
+			
+			if(num[i]) sum++;
+		}
+		System.out.println(sum);
+
+	}
+
+}
