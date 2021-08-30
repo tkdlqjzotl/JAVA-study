@@ -1,0 +1,31 @@
+
+문자열로 풀면되겟다생각
+
+
+
+package lecture0830;
+
+import java.util.Scanner;
+
+public class B2810 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		char arr[] = new char[n];
+		String str = sc.next();
+		arr= str.toCharArray();
+		str = str.replaceAll("S|LL", "*");
+		/*
+		str = str.replace("S", "*S");
+		str = str.replace("LL", "*LL");
+		str= str.concat("*");
+		System.out.println(str);*/
+//		if(arr[n-1] =='S')		
+//			System.out.println(str.length());
+//		else
+		
+		System.out.println( Math.min(str.length()+1, n));
+	}
+
+}
