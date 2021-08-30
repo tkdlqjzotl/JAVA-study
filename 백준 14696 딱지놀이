@@ -1,0 +1,39 @@
+package lecture0830;
+
+import java.util.Scanner;
+
+public class B14696 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+		int n = sc.nextInt();
+
+		outer :for (int i = 0; i < n; i++) {
+			int arrA[] = new int[5], arrB[] = new int[5];
+
+			int J = sc.nextInt();
+			for (int j2 = 0; j2 < J; j2++) {
+				arrA[sc.nextInt()]++;
+			}
+
+			J = sc.nextInt();
+			for (int j2 = 0; j2 < J; j2++) {
+				arrB[sc.nextInt()]++;
+			}
+
+			for (int d = 4; d >= 1; d--) {
+				if (arrA[d] == arrB[d])
+					continue;
+				else if (arrA[d] > arrB[d]) {
+					System.out.println("A");
+					continue outer ;
+				} else {
+					System.out.println("B");
+					continue outer ;
+				}
+			}
+			System.out.println("D");
+		}
+	}
+}
