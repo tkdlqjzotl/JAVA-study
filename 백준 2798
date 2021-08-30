@@ -1,0 +1,34 @@
+package lecture0830;
+
+import java.util.Scanner;
+
+public class B2798 {
+	static int N,M,MAX=0;
+	static int num[];
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		M = sc.nextInt();
+		num = new int [N];
+		for (int i = 0; i < N; i++) {
+			num[i]=sc.nextInt();
+		}		
+		
+		powerset(0,0,0);
+		System.out.println(MAX);
+	}
+	private static void powerset(int cnt, int ind, int sum) {
+		if(sum>M)
+			return;
+		
+		if(cnt==3)
+		{
+			MAX = Math.max(MAX, sum);
+			return;
+		}
+		
+		for (int i = ind; i < N; i++) {
+			powerset(cnt+1, i+1, sum+num[i]);			
+		}
+	}
+}
