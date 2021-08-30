@@ -1,0 +1,59 @@
+그냥 while문으로 풀릴줄알앗는데
+중복되는게 많아보여서
+재귀돌리면서 n의값에따라 몇갱의 직사각형이 나오는지를 검사한다
+
+
+package lecture0829;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class B8320 {
+
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		
+		int N = sc.nextInt();
+/*		int ind=1,sum=0;
+		
+		while(N>=ind)
+		{
+			if(N%ind==0)
+			{
+				sum+= N/ind;
+			}
+			ind++;
+		}
+		*/
+		
+		System.out.println(square(N));
+	}
+
+	private static int square(int n) {
+		int sum=0;
+		List<Integer> list = new ArrayList<>();
+		
+		if(n==1)
+		{
+			return 1;
+		}
+		
+		int ind=1;
+		while(n>=ind)
+		{
+			if(n%ind==0)
+			{
+				list.add(ind);
+			}
+			ind++;
+		}
+		sum= (list.size()+1)/2;
+
+		return square(n-1)+sum;
+	}
+	
+	
+
+}
