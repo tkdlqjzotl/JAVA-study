@@ -1,0 +1,105 @@
+package lecture0921;
+
+import java.util.Arrays;
+import java.util.Scanner;
+//Main
+public class B2644 {
+	static int N, chonNum1, chonNum2, result1, result2;
+	static int p[],result1chonNum[];
+	static boolean visited[];
+
+	static void makeSet() {
+		p = new int[N + 1];
+		result1chonNum = new int[N + 1];
+		visited = new boolean[N+1];
+		//result1chonNum[result1]=0;
+		for (int i = 0; i < p.length; i++) {
+			p[i] = i;
+		}
+	}
+
+	static int find(int a) {
+		if (a == p[a])
+			return a;
+
+		return find(p[a]);
+	}
+
+	static boolean union(int a, int b) {
+		int aRoot = find(a);
+		int bRoot = find(b);
+
+		if (aRoot != bRoot) {
+			p[bRoot] = a;
+			return false;
+		}
+
+		p[bRoot] = a;
+		return true;
+	}
+
+	static boolean findChonNum(int a, int num) {
+		visited[a]=true;
+		result1chonNum[a]=num;
+		chonNum1=num;
+		if (a == p[a]) {
+			//return num + findChonNum2(result2, 0);
+			return false;
+		}
+
+		num++;
+		if (p[a] != result2) {
+			return findChonNum(p[a], num);
+		}
+
+		return true;
+	}
+
+	static int findChonNum2(int a, int num) {
+		if(visited[a])
+		{
+			return num+result1chonNum[a];
+		}
+		
+//		if (a == p[a]) {
+//			return num;
+//		}		
+		else
+		{
+			num++;
+			return findChonNum2(p[a], num);			
+		}
+//		if (p[a] != result1) {
+//			return findChonNum2(p[a], num);
+//		}
+//		
+//		return (num-chonNum1);
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		result1 = sc.nextInt();
+		result2 = sc.nextInt();
+		int M = sc.nextInt();
+		makeSet();
+		for (int m = 0; m < M; m++) {
+			int parent = sc.nextInt();
+			int child = sc.nextInt();
+			p[child] = parent;
+			//System.out.println(Arrays.toString(p));
+			// union(sc.nextInt(), sc.nextInt());
+		}
+		if (find(result1) != find(result2)) {
+			System.out.println(-1);
+		} else {
+			if(findChonNum(result1, 0))
+			{
+				System.out.println(chonNum1+1);
+			}
+			else
+				System.out.println(findChonNum2(result2, 0));
+		}
+
+	}
+}
